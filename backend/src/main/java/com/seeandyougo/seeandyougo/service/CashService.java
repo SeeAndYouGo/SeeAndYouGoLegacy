@@ -47,11 +47,12 @@ public class CashService {
         JsonObject locationData = new JsonObject();
         for (JsonElement element : resultArray) {
             JsonObject entry = element.getAsJsonObject();
-            String location = entry.get("location").getAsString().split("-")[0];
+            String location = entry.get("LOCATION").getAsString();
 
             location = changeRestaurantName(location);
+            if(location.equals("NULL")) continue;
 
-            int client = entry.get("client").getAsInt();
+            int client = entry.get("CLIENT").getAsInt();
 
             if (locationData.has(location)) {
                 int currentClient = locationData.get(location).getAsInt();
@@ -215,11 +216,12 @@ public class CashService {
     }
 
     public String changeRestaurantName(String name){
-        if(name.contains("1학생회관")) name= "1학생회관";
-        else if(name.contains("2학생회관")) name= "2학생회관";
-        else if(name.contains("3학생회관")) name= "3학생회관";
-        else if(name.contains("4학생회관")) name= "상록회관";
-        else if(name.contains("생활과학대학")) name= "생활과학대";
-        return name;
+        String res = "NULL";
+        if(name.contains("Je1")) res= "1학생회관";
+        else if(name.contains("제2학생회관")) res= "2학생회관";
+        else if(name.contains("3학생회관")) res= "3학생회관";
+        else if(name.contains("제4학생화관")) res= "상록회관";
+        else if(name.contains("생활과학대학")) res= "생활과학대";
+        return res;
     }
 }

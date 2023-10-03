@@ -18,8 +18,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-//@CrossOrigin(origins="http://localhost:3001")
+@CrossOrigin(origins="http://localhost:3001")
 //@CrossOrigin(origins="http://frontend:3000")
+//@CrossOrigin(origins = "http://seeandyougo-nginx:80")
+@RequestMapping("/api")
 public class SKJ_CongestionController {
     private final ConnectedService connectedService;
     private final TimeService timeService;

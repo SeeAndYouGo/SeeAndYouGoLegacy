@@ -23,14 +23,13 @@ public class RawWifiService { //
     @Transactional
     public void saveRawWifiData() throws Exception{
 
-        String apiUrl = "http://wifi-dummy-api:8080/svc/offcam/pub/WifiAllInfo?AUTH_KEY=efefef"; // API 엔드포인트
-        System.out.println("heelloo");
+        // String apiUrl = "http://wifi-dummy-api:8080/svc/offcam/pub/WifiAllInfo?AUTH_KEY=efefef"; // API 엔드포인트
+        String apiUrl = "https://api.cnu.ac.kr/svc/offcam/pub/WifiAllInfo?AUTH_KEY=D6E3BE404CC745B885E81D6BD5FE90CD6A59E572";
+        
         // URL 생성
         URL url = new URL(apiUrl);
         // HttpURLConnection 설정
-        System.out.println("heelloo");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        System.out.println("heelloo");
         connection.setRequestMethod("GET");
 
         // 응답 코드 확인

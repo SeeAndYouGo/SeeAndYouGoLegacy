@@ -13,7 +13,7 @@ public class RawWifi {
     @Column(name = "raw_wifi_id")
     private Long id;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition="LONGTEXT")
     private String raw;
 
 }

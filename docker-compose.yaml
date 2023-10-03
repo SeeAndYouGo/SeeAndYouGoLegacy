@@ -30,43 +30,49 @@ services:
     restart: on-failure
     ports:
       - 8080:8080
+    volumes:
+      - ./backend:/app
     networks:
       - db-net
     depends_on:
       - mysql_db
-      - wifi-dummy-api
+      # - wifi-dummy-api
     environment:
       - TZ=Asia/Seoul
-  seeandyougo-nginx:
-    image: nginx:1.21.5-alpine
-    volumes:
-      - ./nginx.conf:/etc/nginx/default.conf
-    ports: 
-      - "80:80/tcp"
-      - "443:443"
-    networks:
-      - db-net
-    environment:
-      - TZ=Asia/Seoul
-    depends_on:
-      - frontend
-      - seeandyougo
-  wifi-dummy-api:
-    container_name: wifi-dummy-api
-    image: shingyeongjun/wifi-dummy-api:latest
-    restart: always
-    # ports: 
-    #   - 3030:8080
-    networks:
-      - db-net
-    environment:
-      - TZ=Asia/Seoul
+  # seeandyougo-nginx:
+  #   container_name: seeandyougo-nginx
+  #   # image: nginx:mainline-alpine3.18-slim
+  #   build: .
+  #   restart: always
+  #   ports: 
+  #     - "80:80/tcp"
+  #     - "443:443"
+  #   # volumes:
+  #   #   - ./default.conf:/etc/seeandyougo-nginx/conf.d/default.conf
+  #   networks:
+  #     - db-net
+  #   environment:
+  #     - TZ=Asia/Seoul
+  #   depends_on:
+  #     - seeandyougo
+  # wifi-dummy-api:
+  #   container_name: wifi-dummy-api
+  #   image: shingyeongjun/wifi-dummy-api:latest
+  #   restart: always
+  #   # ports: 
+  #   #   - 3030:8080
+  #   networks:
+  #     - db-net
+  #   environment:
+  #     - TZ=Asia/Seoul
   frontend:
     container_name: frontend
     build: ./frontend # Dockerfile과 Docker compose가 같은 위치에 있으므로, Dockercompose 기준 현재 디렉토리에서 Dockerfile을 찾는다.
     restart: on-failure
     ports:
       - 3000:3000
+    volumes:
+      - ./frontend:/app
     networks:
       - db-net
     depends_on:
