@@ -45,6 +45,9 @@ public class CashService {
 
         JsonArray resultArray = jsonObject.getAsJsonArray("RESULT");
         JsonObject locationData = new JsonObject();
+
+        String time = "NULL";
+
         for (JsonElement element : resultArray) {
             JsonObject entry = element.getAsJsonObject();
             String location = entry.get("LOCATION").getAsString();
@@ -53,6 +56,10 @@ public class CashService {
             if(location.equals("NULL")) continue;
 
             int client = entry.get("CLIENT").getAsInt();
+            if(time.equals("NULL")){
+                String rawTime = entry.get("CRT_DT").getAsString();
+                time = rawTime.substring(0, 4)+"-"+rawTime.substring(4, 6)+"-"+rawTime.substring(6, 8)+" "+rawTime.substring(8, 10)+":"+rawTime.substring(10, 12)+":"+rawTime.substring(12);
+            }
 
             if (locationData.has(location)) {
                 int currentClient = locationData.get(location).getAsInt();
@@ -70,25 +77,36 @@ public class CashService {
             finalResult.add(locationInfo);
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        // 원하는 포맷을 정의
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        // LocalDateTime 객체를 문자열로 포맷팅
-        String formattedDateTime = now.format(formatter);
-
-        for (JsonElement jsonElement : finalResult) {
-            JsonObject asJsonObject = jsonElement.getAsJsonObject();
-            JsonElement name =  asJsonObject.get("name");
-            JsonElement connected = asJsonObject.get("connected");
-
-            Connected connectedTable = new Connected();
-            connectedTable.setName(name.toString());
-            connectedTable.setConnected(Integer.parseInt(connected.toString()));
-            connectedTable.setTime(formattedDateTime);
-            connectedRepository.save(connectedTable);
+        Long aLong = connectedRepository.countNumberOfData();
+        if(aLong>0){
+            String recentTime = connectedRepository.findRecentTime();
+            if(recentTime.equals(time)) {
+                rawWifiRepository.deleteAll();
+                return;
+            }
         }
+//        LocalDateTime now = LocalDateTime.now();
+//        // 원하는 포맷을 정의
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//        // LocalDateTime 객체를 문자열로 포맷팅
+//        String formattedDateTime = now.format(formatter);
+//        String recentTime = connectedRepository.findRecentTime();
 
-//        rawWifiRepository.deleteAll();
+//        if(!recentTime.equals(time)) {
+            for (JsonElement jsonElement : finalResult) {
+                JsonObject asJsonObject = jsonElement.getAsJsonObject();
+                JsonElement name = asJsonObject.get("name");
+                JsonElement connected = asJsonObject.get("connected");
+
+                Connected connectedTable = new Connected();
+                connectedTable.setName(name.toString());
+                connectedTable.setConnected(Integer.parseInt(connected.toString()));
+                connectedTable.setTime(time);
+                connectedRepository.save(connectedTable);
+            }
+//        }
+
+        rawWifiRepository.deleteAll();
     }
 
     @Transactional
@@ -173,7 +191,9 @@ public class CashService {
 
 
 //                if(todayDate.equals("")) todayDate = date;
-                if(localDate.isEqual(objDate) || objDate.isAfter(localDate)) {
+                if(localDate.isEqual(objDate)
+                         || objDate.isAfter(localDate)
+                ) {
                     // Menu 객체 생성
                     Menu menuEntity = new Menu();
                     menuEntity.setName(name);
@@ -188,7 +208,7 @@ public class CashService {
             }
         }
 
-//        rawMenuRepository.deleteAll();
+        rawMenuRepository.deleteAll();
     }
 
 
@@ -216,7 +236,7 @@ public class CashService {
     }
 
     public String changeRestaurantName(String name){
-        String res = name;
+        String res = "NULL";
         if(name.contains("Je1")) res= "1학생회관";
         else if(name.contains("제2학생회관")) res= "2학생회관";
         else if(name.contains("Je3_Hak") || name.contains("3학생")) res= "3학생회관";

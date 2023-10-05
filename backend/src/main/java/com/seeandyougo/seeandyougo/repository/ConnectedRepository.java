@@ -29,9 +29,22 @@ public class ConnectedRepository {
 
 
     public String findRecentTime(){
+        String res = "NULL";
         TypedQuery<String> query = em.createQuery(
                 "SELECT MAX(ct2.time) FROM Connected ct2",
                 String.class
+        );
+        try{
+            res =query.getSingleResult();
+        }catch(Exception e){}
+
+        return res;
+    }
+
+    public Long countNumberOfData(){
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(*) FROM Connected",
+                Long.class
         );
         return query.getSingleResult();
     }

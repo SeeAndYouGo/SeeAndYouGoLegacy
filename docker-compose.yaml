@@ -39,22 +39,6 @@ services:
       # - wifi-dummy-api
     environment:
       - TZ=Asia/Seoul
-  seeandyougo-nginx:
-    container_name: seeandyougo-nginx
-    # image: nginx:mainline-alpine3.18-slim
-    build: .
-    restart: always
-    ports: 
-      - "80:80/tcp"
-      - "443:443"
-    volumes:
-      - ./backend:/app
-    networks:
-      - backbone
-    environment:
-      - TZ=Asia/Seoul
-    depends_on:
-      - seeandyougo
   # seeandyougo-nginx:
   #   container_name: seeandyougo-nginx
   #   # image: nginx:mainline-alpine3.18-slim
