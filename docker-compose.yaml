@@ -1,7 +1,7 @@
 version: "3.8"
 
 networks:
-  db-net:
+  backbone:
     driver: bridge
 
 services:
@@ -23,7 +23,7 @@ services:
       - --collation-server=utf8mb4_unicode_ci
       - --range_optimizer_max_mem_size=16777216
     networks:
-      - db-net
+      - backbone
   seeandyougo:
     container_name: seeandyougo
     build: ./backend # Dockerfile과 Docker compose가 같은 위치에 있으므로, Dockercompose 기준 현재 디렉토리에서 Dockerfile을 찾는다.
@@ -33,12 +33,28 @@ services:
     volumes:
       - ./backend:/app
     networks:
-      - db-net
+      - backbone
     depends_on:
       - mysql_db
       # - wifi-dummy-api
     environment:
       - TZ=Asia/Seoul
+  seeandyougo-nginx:
+    container_name: seeandyougo-nginx
+    # image: nginx:mainline-alpine3.18-slim
+    build: .
+    restart: always
+    ports: 
+      - "80:80/tcp"
+      - "443:443"
+    volumes:
+      - ./backend:/app
+    networks:
+      - backbone
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - seeandyougo
   # seeandyougo-nginx:
   #   container_name: seeandyougo-nginx
   #   # image: nginx:mainline-alpine3.18-slim
@@ -71,10 +87,10 @@ services:
     restart: on-failure
     ports:
       - 3000:3000
-    volumes:
-      - ./frontend:/app
+    # volumes:
+    #   - ./frontend:/app
     networks:
-      - db-net
+      - backbone
     depends_on:
       - seeandyougo
     environment:

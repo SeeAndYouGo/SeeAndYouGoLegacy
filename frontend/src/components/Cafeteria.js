@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import MyProgress from "./MyProgress";
+import Moment from 'moment';
+import "moment/locale/ko";
 
 const CafeteriaContainer = styled.div`
 	width: 100%;
@@ -59,7 +61,6 @@ const MenuSlider = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	overflow: hidden;
 `;
 
 const MenuItem = styled.p`
@@ -76,7 +77,7 @@ const MenuItem = styled.p`
 	${({ active }) =>
 		active &&
 		`
-        opacity: 1;
+		opacity: 1;
         transform: translateY(0);
     `}
 `;
@@ -123,20 +124,42 @@ const Menu = ({ menuName, priceValue }) => {
 };
 
 // 식당 이름 배열
+// 식당 이름은 한글 기준 5글자로 통일
+// 1학, 2학, 3학은 4.5글자 라서 맨 뒤에만 공백을 추가해줬습니다.
+// 일단 상록회관만 4글자라서 앞 뒤에 공백을 추가해줬습니다.
 const nameList = [
-	"1학생회관",
-	"2학생회관",
-	"3학생회관",
-	"상록회관",
+	"1학생회관\u00a0",
+	"2학생회관\u00a0",
+	"3학생회관\u00a0",
+	"\u00a0상록회관\u00a0", 
 	"생활과학대",
 ];
 
 const Cafeteria = ({ idx, value }) => {
+	const CafeteriaContainer = styled.div`
+		width: 100%;
+		height: 120px;
+		margin-top: 15px;
+		background-color: white;
+		border-radius: 20px;
+		${idx === 0 ? "height: 50px;" : null}
+	`;
+	const FirstRow = styled.div`
+		display: flex;
+		align-items: center;
+		padding-top: 10px;
+		height: 40%;
+		${idx === 0
+			? "top: 50%; transform: translateY(-50%); padding: 0; position:relative;"
+			: null}
+	`;
+
 	const [status, setStatus] = useState("원활");
 	const [rate, setRate] = useState(value);
 	const [menuData, setMenuData] = useState([]);
-	// const myDate = "20230901";
-
+	const myDate = Moment().format("YYYYMMDD");
+	// const myDate = "20231003";
+	console.log(myDate);
 	useEffect(() => {
 		if (rate >= 66) {
 			setStatus("혼잡");
@@ -149,18 +172,21 @@ const Cafeteria = ({ idx, value }) => {
 
 		const fetchData = async () => {
 			// "http:seeandyougo:8080/get_menu/{name}/{date}"
-			const res = await fetch(`/api/get_menu/{name}/{date}`, {
+			const res = await fetch(`http://localhost:8080/get_menu/restaurant${idx+1}/${myDate}`, {
 				headers: {
 					"Content-Type": "application/json",
 				},
 				method: "GET",
 			});
 			const result = await res.json();
+			console.log(idx)
+			console.log(result)
 			return result;
 		};
 		fetchData().then((data) => {
 			setMenuData(data);
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value, rate]);
 
 	return (
@@ -176,17 +202,19 @@ const Cafeteria = ({ idx, value }) => {
 					style={{ color: "#b0b0b0", marginLeft: 10 }}
 				/>
 			</FirstRow>
-			<SecondRow>
-				{menuData.map((val, index) => {
-					return (
-						<Menu
-							key={index}
-							menuName={val.menu}
-							priceValue={val.price}
-						/>
-					);
-				})}
-			</SecondRow>
+			{idx === 0 ? null : (
+				<SecondRow>
+					{menuData.map((val, index) => {
+						return (
+							<Menu
+								key={index}
+								menuName={val.menu}
+								priceValue={val.price}
+							/>
+						);
+					})}
+				</SecondRow>
+			)}
 		</CafeteriaContainer>
 	);
 };

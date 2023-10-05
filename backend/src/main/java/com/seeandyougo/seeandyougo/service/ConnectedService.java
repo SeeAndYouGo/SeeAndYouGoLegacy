@@ -16,15 +16,19 @@ public class ConnectedService {
     private final ConnectedRepository connectedRepository;
 
     public Connected getRecentConnected(String restaurantName){
-        Connected result = connectedRepository.findRecent(restaurantName);
-//        CongestionResponse congestionResponse = new CongestionResponse();
-//        for (Connected connected : recent) {
-//            String name = connected.getName();
-//            if (name.equals(restaurantName)) {
-//                congestionResponse.setConnected(connected.getConnected());
-//                congestionResponse.setDateTime(connected.getTime());
-//            }
-//        }
+        String changeRestaurantName = changeRestaurantName(restaurantName);
+        Connected result = connectedRepository.findRecent(changeRestaurantName);
+
         return result;
+    }
+
+    public String changeRestaurantName(String name){
+        String res = name;
+        if(name.contains("1")) res= "1학생회관";
+        else if(name.contains("2")) res= "2학생회관";
+        else if(name.contains("3")) res= "3학생회관";
+        else if(name.contains("4")) res= "상록회관";
+        else if(name.contains("5")) res= "생활과학대";
+        return res;
     }
 }

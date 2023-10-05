@@ -23,4 +23,11 @@ public class IterService {
         cashService.wifiCashing();
 //        rawMenuService.saveTodayMenu();
     }
+
+    @Transactional
+    @Scheduled(fixedRate = 3000000, initialDelay = 1000)
+    public void repeatCallMenu() throws Exception { // 하루에 한번씩 갱신하느건??
+        rawMenuService.saveTodayMenu();
+        cashService.menuTodayCashing();
+    }
 }

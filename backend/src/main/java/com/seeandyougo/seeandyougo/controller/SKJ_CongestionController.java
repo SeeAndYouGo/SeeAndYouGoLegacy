@@ -18,10 +18,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins="http://localhost:3001")
-//@CrossOrigin(origins="http://frontend:3000")
-//@CrossOrigin(origins = "http://seeandyougo-nginx:80")
-@RequestMapping("/api")
+
+// @CrossOrigin(origins="http://localhost:3001")
+@CrossOrigin(origins="http://localhost:3000")
+// @CrossOrigin(origins = "http://seeandyougo-nginx:80")
+// @RequestMapping("/api")
 public class SKJ_CongestionController {
     private final ConnectedService connectedService;
     private final TimeService timeService;
@@ -33,44 +34,16 @@ public class SKJ_CongestionController {
 
     @GetMapping("/get_congestion/{restaurant}")
     public ResponseEntity<CongestionResponse> congestionRequest(@PathVariable("restaurant") String place) throws Exception {
-        String[] str = place.split("");
-        String name = str[place.length()-1];
-        String placeName = name+"학생회관";
-        System.out.println("h11");
-//        rawWifiService.saveRawWifiData();
-//        cashService.wifiCashing();
 
         CongestionResponse congestionResponse = new CongestionResponse();
 
-        Connected recentConnected = connectedService.getRecentConnected(placeName);
-
-        if(placeName.equals("1학생회관")) congestionResponse.setCapacity(200);
-        else if(placeName.equals("2학생회관")) congestionResponse.setCapacity(500);
-        else if(placeName.equals("3학생회관")) congestionResponse.setCapacity(30);
-//        else if(placeName.equals("4학생회관")) congestionResponse.setCapacity(30);
-
-        congestionResponse.setConnected(recentConnected.getConnected());
-        congestionResponse.setDateTime(recentConnected.getTime());
-        return ResponseEntity.ok(congestionResponse);
-    }
-
-    @GetMapping("/api/get_congestion/{restaurant}")
-    public ResponseEntity<CongestionResponse> congestionRequestAPI(@PathVariable("restaurant") String place) throws Exception {
-        String[] str = place.split("");
-        String name = str[place.length()-1];
-        String placeName = name+"학생회관";
-        System.out.println("api recall");
-//        rawWifiService.saveRawWifiData();
-//        cashService.wifiCashing();
-
-        CongestionResponse congestionResponse = new CongestionResponse();
-
-        Connected recentConnected = connectedService.getRecentConnected(placeName);
-
-        if(placeName.equals("1학생회관")) congestionResponse.setCapacity(200);
-        else if(placeName.equals("2학생회관")) congestionResponse.setCapacity(500);
-        else if(placeName.equals("3학생회관")) congestionResponse.setCapacity(30);
-//        else if(placeName.equals("4학생회관")) congestionResponse.setCapacity(30);
+        Connected recentConnected = connectedService.getRecentConnected(place);
+        String name = recentConnected.getName();
+        if(name.contains("1")) congestionResponse.setCapacity(486);
+        else if(name.contains("2")) congestionResponse.setCapacity(392);
+        else if(name.contains("3")) congestionResponse.setCapacity(273);
+        else if(name.contains("상록")) congestionResponse.setCapacity(194);
+        else if(name.contains("생활")) congestionResponse.setCapacity(170);
 
         congestionResponse.setConnected(recentConnected.getConnected());
         congestionResponse.setDateTime(recentConnected.getTime());
@@ -88,15 +61,8 @@ public class SKJ_CongestionController {
     @GetMapping("/get_menu/{restaurant}/{date}")
     public ResponseEntity<List<MenuResponse>> todayMenuRequest(
             @PathVariable("restaurant") String place, @PathVariable("date") String date) throws Exception {
-        String[] str = place.split("");
-        String name = str[place.length()-1];
-        String placeName = name+"학생회관";
 
-        System.out.println("h22");
-        rawMenuService.saveTodayMenu();
-        cashService.menuTodayCashing();
-
-        return ResponseEntity.ok(menuService.getRestaurantMenu(placeName, date));
+        return ResponseEntity.ok(menuService.getRestaurantMenu(place, date));
     }
 
     @GetMapping("/getRawWifi")

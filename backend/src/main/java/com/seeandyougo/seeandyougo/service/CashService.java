@@ -115,7 +115,7 @@ public class CashService {
                 name = changeRestaurantName(name);
 
                 String priceStr = menuObject.get("MENU_PRC").getAsString();
-                Integer price = new Integer(0);
+                int price = 0;
                 if(priceStr.length()!=0){
                     price = Integer.parseInt(priceStr);
                 }
@@ -164,7 +164,7 @@ public class CashService {
                 name = changeRestaurantName(name);
 
                 String priceStr = menuObject.get("MENU_PRC").getAsString();
-                Integer price = new Integer(0);
+                int price = 0;
                 if(priceStr.length()!=0){
                     price = Integer.parseInt(priceStr);
                 }
@@ -216,11 +216,11 @@ public class CashService {
     }
 
     public String changeRestaurantName(String name){
-        String res = "NULL";
+        String res = name;
         if(name.contains("Je1")) res= "1학생회관";
         else if(name.contains("제2학생회관")) res= "2학생회관";
-        else if(name.contains("3학생회관")) res= "3학생회관";
-        else if(name.contains("제4학생화관")) res= "상록회관";
+        else if(name.contains("Je3_Hak") || name.contains("3학생")) res= "3학생회관";
+        else if(name.contains("제4학생")) res= "상록회관";
         else if(name.contains("생활과학대학")) res= "생활과학대";
         return res;
     }
