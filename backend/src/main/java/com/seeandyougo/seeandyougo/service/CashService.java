@@ -52,7 +52,7 @@ public class CashService {
             JsonObject entry = element.getAsJsonObject();
             String location = entry.get("LOCATION").getAsString();
 
-            location = changeRestaurantName(location);
+            location = changeRestaurantNameforWifi(location);
             if(location.equals("NULL")) continue;
 
             int client = entry.get("CLIENT").getAsInt();
@@ -93,17 +93,17 @@ public class CashService {
 //        String recentTime = connectedRepository.findRecentTime();
 
 //        if(!recentTime.equals(time)) {
-            for (JsonElement jsonElement : finalResult) {
-                JsonObject asJsonObject = jsonElement.getAsJsonObject();
-                JsonElement name = asJsonObject.get("name");
-                JsonElement connected = asJsonObject.get("connected");
+        for (JsonElement jsonElement : finalResult) {
+            JsonObject asJsonObject = jsonElement.getAsJsonObject();
+            JsonElement name = asJsonObject.get("name");
+            JsonElement connected = asJsonObject.get("connected");
 
-                Connected connectedTable = new Connected();
-                connectedTable.setName(name.toString());
-                connectedTable.setConnected(Integer.parseInt(connected.toString()));
-                connectedTable.setTime(time);
-                connectedRepository.save(connectedTable);
-            }
+            Connected connectedTable = new Connected();
+            connectedTable.setName(name.toString());
+            connectedTable.setConnected(Integer.parseInt(connected.toString()));
+            connectedTable.setTime(time);
+            connectedRepository.save(connectedTable);
+        }
 //        }
 
         rawWifiRepository.deleteAll();
@@ -130,7 +130,7 @@ public class CashService {
                 String type = menuObject.get("FOOM_DIV_NM").getAsString();
                 String menu = menuObject.get("MENU_KORN_NM").getAsString();
 
-                name = changeRestaurantName(name);
+                name = changeRestaurantNameforMenu(name);
 
                 String priceStr = menuObject.get("MENU_PRC").getAsString();
                 int price = 0;
@@ -179,7 +179,7 @@ public class CashService {
                 String type = menuObject.get("FOOM_DIV_NM").getAsString();
                 String menu = menuObject.get("MENU_KORN_NM").getAsString();
 
-                name = changeRestaurantName(name);
+                name = changeRestaurantNameforMenu(name);
 
                 String priceStr = menuObject.get("MENU_PRC").getAsString();
                 int price = 0;
@@ -192,7 +192,7 @@ public class CashService {
 
 //                if(todayDate.equals("")) todayDate = date;
                 if(localDate.isEqual(objDate)
-                         || objDate.isAfter(localDate)
+                        || objDate.isAfter(localDate)
                 ) {
                     // Menu 객체 생성
                     Menu menuEntity = new Menu();
@@ -235,13 +235,23 @@ public class CashService {
         return new ArrayList<>(responseMap.values());
     }
 
-    public String changeRestaurantName(String name){
+    public String changeRestaurantNameforWifi(String name){
         String res = "NULL";
         if(name.contains("Je1")) res= "1학생회관";
         else if(name.contains("제2학생회관")) res= "2학생회관";
         else if(name.contains("Je3_Hak") || name.contains("3학생")) res= "3학생회관";
         else if(name.contains("제4학생")) res= "상록회관";
-        else if(name.contains("생활과학대학")) res= "생활과학대";
+        else if(name.contains("생활과학대 1F")) res= "생활과학대";
+        return res;
+    }
+
+    public String changeRestaurantNameforMenu(String name){
+        String res = "NULL";
+        if(name.contains("Je1")) res= "1학생회관";
+        else if(name.contains("제2학생회관")) res= "2학생회관";
+        else if(name.contains("Je3_Hak") || name.contains("3학생")) res= "3학생회관";
+        else if(name.contains("제4학생")) res= "상록회관";
+        else if(name.contains("생활과학대")) res= "생활과학대";
         return res;
     }
 }
