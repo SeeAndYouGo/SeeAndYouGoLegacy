@@ -71,6 +71,7 @@ function App() {
 
 	return (
 		<div className="App">
+			<a href='https://docs.google.com/forms/d/e/1FAIpQLSfGeuHsAH4fXrazXBLzSn1J7z3ux8in1OQInDH2LYHQnRiU5Q/viewform?usp=sf_link'>구글 폼!</a>
 			<Header />
 			{restaurantData.map((val, idx) =>
 				idx === 0 ? (
