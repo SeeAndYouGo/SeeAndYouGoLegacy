@@ -1,0 +1,24 @@
+name: deploy-service
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy SeeAndYouGo to Naver Cloud Instance
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USERNAME }}
+          password: ${{ secrets.DEPLOY_SERVER_PASSWORD }}
+          port: 22
+          script: |
+            cd /root/SeeAndYouGoLegacy
+            git pull
+            cd backend/
+            ./gradlew assemble
+            cd ..
+            docker-compose restart --build
+            
