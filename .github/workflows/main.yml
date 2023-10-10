@@ -20,5 +20,5 @@ jobs:
             cd backend/
             ./gradlew assemble
             cd ..
-            docker-compose restart --build
+            docker compose restart --build
             
