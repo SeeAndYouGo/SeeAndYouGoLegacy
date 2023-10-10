@@ -1,4 +1,4 @@
-# SeeAndYouGo
+# SeeAndYouGo V1
 
 # api 명세
 
