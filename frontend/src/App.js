@@ -43,11 +43,11 @@ function App() {
 	const fetchRestaurantData = () => {
 		// JSON 파일 또는 API URL 주소
 		const jsonFilePaths = [
-			"http://localhost:8080/get_congestion/restaurant1",
-			"http://localhost:8080/get_congestion/restaurant2",
-			"http://localhost:8080/get_congestion/restaurant3",
-			"http://localhost:8080/get_congestion/restaurant4",
-			"http://localhost:8080/get_congestion/restaurant5",
+			"/api/get_congestion/restaurant1",
+			"/api/get_congestion/restaurant2",
+			"/api/get_congestion/restaurant3",
+			"/api/get_congestion/restaurant4",
+			"/api/get_congestion/restaurant5",
 		];
 		// const jsonFilePaths = [
 		// 	"assets/json/restaurant1.json",
