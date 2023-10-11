@@ -154,7 +154,7 @@ const Cafeteria = ({ idx, value }) => {
 		setRate(value);
 
 		const fetchData = async () => {
-			const nowUrl = `http://localhost:8080/get_menu/restaurant${idx + 1}/${myDate}`;
+			const nowUrl = `/api/get_menu/restaurant${idx + 1}/${myDate}`;
 			// const nowUrl = "/assets/json/myMenu.json";
 			// `http://localhost:8080/get_menu/restaurant${idx + 1}/${myDate}`,
 			const res = await fetch(nowUrl, {
