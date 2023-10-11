@@ -26,6 +26,7 @@ jobs:
             cd /root/SeeAndYouGoLegacy
             git pull
             cd backend/
+            chmod 777 gradlew
             ./gradlew assemble
             cd ..
             docker compose build
