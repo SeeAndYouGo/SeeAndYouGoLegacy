@@ -179,6 +179,7 @@ public class CashService {
                 String dept = menuObject.get("CAFE_DTL_DIV_NM").getAsString();
                 String type = menuObject.get("FOOM_DIV_NM").getAsString();
                 String menu = menuObject.get("MENU_KORN_NM").getAsString();
+                if(menu.contains("매주 수요일은")) continue;
 
                 name = changeRestaurantNameforMenu(name);
 
