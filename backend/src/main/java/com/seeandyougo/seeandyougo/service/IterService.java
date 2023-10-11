@@ -33,7 +33,7 @@ public class IterService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 36000000, initialDelay = 1000)
+    @Scheduled(cron="0 0 0 * * *")
     public void repeatCallMenu() throws Exception { // 하루에 한번씩 갱신하느건??
         rawMenuService.saveTodayMenu();
         cashService.menuTodayCashing();
