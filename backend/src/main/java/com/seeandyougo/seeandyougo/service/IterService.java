@@ -22,11 +22,16 @@ public class IterService {
     private final RawWifiService rawWifiService;
     private final RawWifiRepository rawWifiRepository;
     private final ConnectedRepository connectedRepository;
+    private boolean first = false;
 
     @Transactional
     @Scheduled(fixedRate = 60000, initialDelay = 1000)
     public void repeatCallWifi() throws Exception { // 하루에 한번씩 갱신하느건??
 //        System.out.println("hello");
+        if(!first) {
+            repeatCallMenu();
+            first = true;
+        }
         rawWifiService.saveRawWifiData();
         cashService.wifiCashing();
 //        rawMenuService.saveTodayMenu();
@@ -35,13 +40,6 @@ public class IterService {
     @Transactional
     @Scheduled(cron="0 0 0 * * *")
     public void repeatCallMenu() throws Exception { // 하루에 한번씩 갱신하느건??
-        rawMenuService.saveTodayMenu();
-        cashService.menuTodayCashing();
-    }
-
-    @Transactional
-    @Scheduled(initialDelay = 1000)
-    public void repeatCallMenuFirst() throws Exception { // 하루에 한번씩 갱신하느건??
         rawMenuService.saveTodayMenu();
         cashService.menuTodayCashing();
     }
