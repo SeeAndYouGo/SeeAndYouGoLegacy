@@ -16,7 +16,7 @@ services:
       MYSQL_PASSWORD: seeandyougo
       TZ: 'Asia/Seoul'
     ports:
-      - "3307:3306"
+      - "3306:3306"
     command:
       - --default-authentication-plugin=mysql_native_password
       - --character-set-server=utf8mb4
@@ -39,22 +39,22 @@ services:
       # - wifi-dummy-api
     environment:
       - TZ=Asia/Seoul
-  # seeandyougo-nginx:
-  #   container_name: seeandyougo-nginx
-  #   # image: nginx:mainline-alpine3.18-slim
-  #   build: .
-  #   restart: always
-  #   ports: 
-  #     - "80:80/tcp"
-  #     - "443:443"
-  #   # volumes:
-  #   #   - ./default.conf:/etc/seeandyougo-nginx/conf.d/default.conf
-  #   networks:
-  #     - db-net
-  #   environment:
-  #     - TZ=Asia/Seoul
-  #   depends_on:
-  #     - seeandyougo
+  seeandyougo-nginx:
+    container_name: seeandyougo-nginx
+    # image: nginx:mainline-alpine3.18-slim
+    build: .
+    restart: always
+    ports: 
+      - "80:80/tcp"
+      - "443:443"
+    # volumes:
+    #   - ./default.conf:/etc/seeandyougo-nginx/conf.d/default.conf
+    networks:
+      - backbone
+    environment:
+      - TZ=Asia/Seoul
+    depends_on:
+      - seeandyougo
   # wifi-dummy-api:
   #   container_name: wifi-dummy-api
   #   image: shingyeongjun/wifi-dummy-api:latest
