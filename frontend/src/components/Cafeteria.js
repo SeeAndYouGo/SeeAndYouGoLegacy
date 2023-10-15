@@ -28,7 +28,7 @@ const SecondRow = styled.div`
 	justify-content: center;
 	align-items: center;
 	text-align: center;
-	height: 65%;
+	height: 50%;
 
 	> div {
 		border-left: dashed 1.5px #d1d1d1;
@@ -41,7 +41,7 @@ const SecondRow = styled.div`
 `;
 
 const MenuSlider = styled.div`
-	padding-bottom: 5px;
+	padding: 5px 0px 10px 0px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -66,14 +66,14 @@ const MenuItem = styled.p`
     `}
 `;
 
-// 메뉴 이름 1.5초마다 변경되어 표시
+// 메뉴 이름 2.0초마다 변경되어 표시
 const MenuList = ({ nowList }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentIndex((prevIndex) => (prevIndex + 1) % nowList.length);
-		}, 1500); // 1.5초마다 변경
+		}, 2000); // 2.0초마다 변경
 
 		return () => clearInterval(interval);
 	}, [nowList.length, currentIndex]);
@@ -89,20 +89,43 @@ const MenuList = ({ nowList }) => {
 	);
 };
 
+// dept 표시
+const Dept = styled.p`
+	padding: 1px 7px;
+	margin: 0px 5px;
+	text-align: center;
+	background-color: #555555;
+	color: white;
+	border-radius: 5px;
+	font-size: 12px;
+	text-align: center;
+	font-weight: 400;
+`;
+
 // 메뉴 가격 표시
-const Price = styled.label`
+const Price = styled.p`
 	color: "#777777";
-	margin: 5px 0;
+	margin: 0px 5px;
 	font-size: 12px;
 	font-weight: 300;
 `;
 
 // Row 2번째에서의 메뉴 이름과 가격
-const Menu = ({ menuName, priceValue }) => {
+const Menu = ({ menuDept, menuPrice, menuName }) => {
+	const tempDept = menuDept.substring(0, menuDept.length - 2);
 	return (
 		<div>
+			<div
+				style={{
+					display: "flex",
+					margin: "0px 0px 10px 0px",
+					justifyContent: "center",
+				}}
+			>
+				<Dept>{tempDept}</Dept>
+				<Price>{menuPrice}</Price>
+			</div>
 			<MenuList nowList={menuName} />
-			<Price>{priceValue}</Price>
 		</div>
 	);
 };
@@ -112,10 +135,11 @@ const Menu = ({ menuName, priceValue }) => {
 // 1학, 2학, 3학은 4.5글자 라서 맨 뒤에만 공백을 추가해줬습니다.
 // 일단 상록회관만 4글자라서 앞 뒤에 공백을 추가해줬습니다.
 const nameList = [
+	"",
 	"1학생회관\u00a0",
 	"2학생회관\u00a0",
 	"3학생회관\u00a0",
-	"\u00a0상록회관\u00a0", 
+	"\u00a0\u00a0상록회관\u00a0",
 	"생활과학대",
 ];
 
@@ -126,14 +150,15 @@ const Cafeteria = ({ idx, value }) => {
 		margin-top: 15px;
 		background-color: white;
 		border-radius: 20px;
-		${idx === 0 ? "height: 50px;" : null}
+
+		${idx === 1 ? "height: 50px;" : null}
 	`;
 	const FirstRow = styled.div`
 		display: flex;
 		align-items: center;
 		padding-top: 10px;
 		height: 40%;
-		${idx === 0
+		${idx === 1
 			? "top: 50%; transform: translateY(-50%); padding: 0; position:relative;"
 			: null}
 	`;
@@ -154,9 +179,8 @@ const Cafeteria = ({ idx, value }) => {
 		setRate(value);
 
 		const fetchData = async () => {
-			const nowUrl = `/api/get_menu/restaurant${idx + 1}/${myDate}`;
-			// const nowUrl = "/assets/json/myMenu.json";
-			// `http://localhost:8080/get_menu/restaurant${idx + 1}/${myDate}`,
+			const nowUrl = `/api/get_menu/restaurant${idx}/${myDate}`;
+			// const nowUrl = "/assets/json/myMenu2.json";
 			const res = await fetch(nowUrl, {
 				headers: {
 					"Content-Type": "application/json",
@@ -164,12 +188,12 @@ const Cafeteria = ({ idx, value }) => {
 				method: "GET",
 			});
 			const result = await res.json();
-			console.log(result);
+			// 넘어온 메뉴 확인용
+			// console.log(result);
 			return result;
 		};
 		fetchData().then((data) => {
 			setMenuData(data);
-		
 		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [value, rate]);
@@ -182,19 +206,22 @@ const Cafeteria = ({ idx, value }) => {
 					{status}
 				</span>
 				<MyProgress value={rate} />
-				<FontAwesomeIcon
-					icon={faChevronRight}
-					style={{ color: "#b0b0b0", marginLeft: 10 }}
-				/>
+				{idx === 1 ? null : (
+					<FontAwesomeIcon
+						icon={faChevronRight}
+						style={{ color: "#b0b0b0", marginLeft: 10 }}
+					/>
+				)}
 			</FirstRow>
-			{idx === 0 ? null : (
+			{idx === 1 ? null : (
 				<SecondRow>
 					{menuData.map((val, index) => {
 						return (
 							<Menu
 								key={index}
+								menuDept={val.dept}
+								menuPrice={val.price}
 								menuName={val.menu}
-								priceValue={val.price}
 							/>
 						);
 					})}
