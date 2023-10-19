@@ -23,7 +23,7 @@ public class IterService {
     private final RawWifiRepository rawWifiRepository;
     private final ConnectedRepository connectedRepository;
     private final MenuRepository menuRepository;
-    private boolea first = false;
+    private boolean first = false;
 
     @Transactional
     @Scheduled(fixedRate = 60000, initialDelay = 1000)
