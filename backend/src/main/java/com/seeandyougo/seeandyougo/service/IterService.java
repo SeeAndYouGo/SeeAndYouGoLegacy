@@ -2,6 +2,7 @@ package com.seeandyougo.seeandyougo.service;
 
 import com.seeandyougo.seeandyougo.repository.ConnectedRepository;
 import com.seeandyougo.seeandyougo.repository.RawMenuRepository;
+import com.seeandyougo.seeandyougo.repository.MenuRepository;
 import com.seeandyougo.seeandyougo.repository.RawWifiRepository;
 import com.seeandyougo.seeandyougo.table.RawWifi;
 import lombok.RequiredArgsConstructor;
