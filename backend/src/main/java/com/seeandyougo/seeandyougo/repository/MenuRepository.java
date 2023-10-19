@@ -32,4 +32,12 @@ public class MenuRepository {
 
         return query.getResultList();
     }
+
+    public Long countNumberOfData(){
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(*) FROM Menu",
+                Long.class
+        );
+        return query.getSingleResult();
+    }
 }
