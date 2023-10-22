@@ -49,14 +49,12 @@ public class RawMenuService {
 
                 reader.close();
                 responseData = response.toString();
-
-
             }
             if (responseData.contains("\"MSG\":\"N\"")) {
                 // MSG가 "N"이면 멈춤
-                System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiii");
                 break;
             }
+
             RawMenu rawMenu = new RawMenu();
             rawMenu.setId(idx);
             rawMenu.setRaw(responseData);
@@ -91,20 +89,13 @@ public class RawMenuService {
 
             reader.close();
             responseData = response.toString();
-
-
         }
         if (responseData.contains("\"MSG\":\"N\"")) {
             // MSG가 "N"이면 멈춤
-            System.out.println("hiiiiiiiiiiiiiiiiiiiiiiiiiiii");
             return;
         }
         RawMenu rawMenu = new RawMenu();
-//        rawMenu.setId(1L);
         rawMenu.setRaw(responseData);
         rawMenuRepository.save(rawMenu);
     }
-
-
-
 }

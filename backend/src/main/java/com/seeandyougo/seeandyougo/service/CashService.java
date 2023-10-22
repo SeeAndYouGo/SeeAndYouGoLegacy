@@ -169,7 +169,6 @@ public class CashService {
             JsonObject jsonObject = jsonParser.parse(jsonData).getAsJsonObject();
 
             JsonArray resultArray = jsonObject.getAsJsonArray("RESULT");
-            String todayDate = "";
             // "OutBlock" 배열 순회
             for (JsonElement element : resultArray) {
                 JsonObject menuObject = element.getAsJsonObject();
@@ -191,11 +190,7 @@ public class CashService {
                 String dateStr = menuObject.get("FOOM_YMD").getAsString();
                 LocalDate objDate = LocalDate.parse(dateStr, formatter);
 
-
-//                if(todayDate.equals("")) todayDate = date;
-                if(localDate.isEqual(objDate)
-                        || objDate.isAfter(localDate)
-                ) {
+                if(localDate.isEqual(objDate) || objDate.isAfter(localDate)) {
                     // Menu 객체 생성
                     Menu menuEntity = new Menu();
                     menuEntity.setName(name);
@@ -204,12 +199,10 @@ public class CashService {
                     menuEntity.setMenu(menu);
                     menuEntity.setPrice(price);
                     menuEntity.setDate(dateStr);
-
                     menuRepository.save(menuEntity);
                 }else break;
             }
         }
-
         rawMenuRepository.deleteAll();
     }
 
@@ -226,7 +219,6 @@ public class CashService {
                 response.setDept(menu.getDept());
                 response.setType(menu.getType());
                 response.setPrice(menu.getPrice());
-
                 responseMap.put(key, response);
             }
 
