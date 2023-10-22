@@ -6,7 +6,6 @@ import com.seeandyougo.seeandyougo.repository.MenuRepository;
 import com.seeandyougo.seeandyougo.repository.RawWifiRepository;
 import com.seeandyougo.seeandyougo.table.RawWifi;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
