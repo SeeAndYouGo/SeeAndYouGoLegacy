@@ -23,14 +23,12 @@ public class IterService {
     private final RawWifiRepository rawWifiRepository;
     private final ConnectedRepository connectedRepository;
     private final MenuRepository menuRepository;
-    private boolean first = false;
 
     @Transactional
     @Scheduled(fixedRate = 60000, initialDelay = 1000)
     public void repeatCallWifi() throws Exception { // 하루에 한번씩 갱신하느건??
-        if(!first && menuRepository.countNumberOfData() == 0) {
+        if(menuRepository.countNumberOfData() == 0) {
             repeatCallMenu();
-            first = true;
         }
         rawWifiService.saveRawWifiData();
         cashService.wifiCashing();
