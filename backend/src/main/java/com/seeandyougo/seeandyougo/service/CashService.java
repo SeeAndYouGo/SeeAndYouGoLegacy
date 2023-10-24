@@ -200,7 +200,7 @@ public class CashService {
                     menuEntity.setPrice(price);
                     menuEntity.setDate(dateStr);
                     menuRepository.save(menuEntity);
-                }else break;
+                }else continue;
             }
         }
         rawMenuRepository.deleteAll();
