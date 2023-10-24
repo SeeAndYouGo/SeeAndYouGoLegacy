@@ -190,7 +190,7 @@ public class CashService {
                 String dateStr = menuObject.get("FOOM_YMD").getAsString();
                 LocalDate objDate = LocalDate.parse(dateStr, formatter);
 
-                if(localDate.isEqual(objDate) || objDate.isAfter(localDate)) {
+                if(localDate.isEqual(objDate)) {
                     // Menu 객체 생성
                     Menu menuEntity = new Menu();
                     menuEntity.setName(name);
