@@ -5,6 +5,7 @@ COPY . .
 
 RUN yarn add moment
 RUN yarn install
+RUN yarn add react-router-dom
 
 EXPOSE 3000
 
