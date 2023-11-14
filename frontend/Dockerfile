@@ -6,7 +6,9 @@ COPY . .
 RUN yarn add moment
 RUN yarn install
 RUN yarn add react-router-dom
+RUN npm install -g serve
+RUN yarn build
 
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["serve", "-s", "build"]
